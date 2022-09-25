@@ -17,7 +17,6 @@
   },
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "esbuild --bundle --format=cjs  src/index.ts --outfile=dist/index.cjs && esbuild --bundle --format=esm  src/index.ts --outfile=dist/index.mjs",
     "lint": "eslint \"**/*.{ts,js}\"",

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      height: 3000px;
+    }
+    .content {
+      display: inline-block;
+      background-color: yellow;
+    }
+    .comment {
+      /* display: ; */
+      position: fixed;
+      right: 100px;
+      top: 100px;
+      background-color: red;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">sdf</div>
+  <script type="module">
+    import MarkdownIt from 'markdown-it'
+    import comment from './dist/index.mjs'
+
+    const md = new MarkdownIt()
+    md.use(comment)
+const result = md.render(`
+
+* hello
+* world
+
+Hello [World]-This is a comment-, this is a comment
+
+`)
+document.getElementById('app').innerHTML = result
+console.log(result)
+  </script>
+</body>
+</html>

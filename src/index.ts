@@ -98,18 +98,18 @@ export default function comment_plugin(md: MarkdownIt, options: Options) {
     const content = result[1]
     const comment = result[2]
 
-    state.push('content_open', 'div', 1)
+    state.push('content_open', 'span', 1)
 
     let token = state.push('text', '', 0)
     token.content = content
 
-    state.push('content_close', 'div', -1)
+    state.push('content_close', 'span', -1)
 
-    state.push('comment_open', 'div', 1)
+    state.push('comment_open', 'span', 1)
     token = state.push('text', '', 0)
     token.content = comment
 
-    state.push('comment_close', 'div', -1)
+    state.push('comment_close', 'span', -1)
 
     // go to the end of the comment
     state.pos += content.length + comment.length + 4
