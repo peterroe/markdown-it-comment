@@ -69,10 +69,24 @@ interface Options {
 
 type renderFunction = (tokens: Array<Token>, idx: number, options: any, env: any, slf: any) => string
 
+let count = 0
+
 export default function comment_plugin(md: MarkdownIt, options: Options) {
   const renderContentDefault: renderFunction = (tokens, idx, _options, env, slf) => {
     if (tokens[idx].nesting === 1)
       tokens[idx].attrJoin('class', 'content')
+
+    console.log('loaded', tokens[idx])
+    window.onload = () => {
+      const contentNode = document.querySelector(`.content_${tokens[idx]?.meta?.count}`)
+      const commentNode = document.querySelector(`.comment_${tokens[idx]?.meta?.count}`)
+      console.log('contentNode', `.content_${tokens[idx]?.meta?.count}`)
+      console.log('commentNode', commentNode)
+      if (contentNode && commentNode) {
+        commentNode.style.top = `${contentNode.offsetTop}px`
+        document.querySelector('.comment')
+      }
+    }
 
     return slf.renderToken(tokens, idx, _options, env, slf)
   }
@@ -80,7 +94,7 @@ export default function comment_plugin(md: MarkdownIt, options: Options) {
   const renderCommentDefault: renderFunction = (tokens, idx, _options, env, slf) => {
     if (tokens[idx].nesting === 1)
       tokens[idx].attrJoin('class', 'comment')
-
+    // console.log(tokens[idx])
     return slf.renderToken(tokens, idx, _options, env, slf)
   }
 
@@ -98,18 +112,25 @@ export default function comment_plugin(md: MarkdownIt, options: Options) {
     const content = result[1]
     const comment = result[2]
 
-    state.push('content_open', 'span', 1)
+    let token = state.push('content_open', 'span', 1)
+    token.attrJoin('class', `content_${count}`)
+    token.meta = { count }
 
-    let token = state.push('text', '', 0)
+    token = state.push('text', '', 0)
     token.content = content
 
     state.push('content_close', 'span', -1)
 
-    state.push('comment_open', 'span', 1)
+    token = state.push('comment_open', 'span', 1)
+    token.attrJoin('class', `comment_${count}`)
+    token.meta = { count }
+
     token = state.push('text', '', 0)
     token.content = comment
 
     state.push('comment_close', 'span', -1)
+
+    count++
 
     // go to the end of the comment
     state.pos += content.length + comment.length + 4

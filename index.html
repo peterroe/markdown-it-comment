@@ -15,7 +15,7 @@
     }
     .comment {
       /* display: ; */
-      position: fixed;
+      position: absolute;
       right: 100px;
       top: 100px;
       background-color: red;
@@ -35,8 +35,24 @@ const result = md.render(`
 * hello
 * world
 
+
+## saf bg-transparent
+
+\`\`\`
+sf
+\`\`\`
+
 Hello [World]-This is a comment-, this is a comment
 
+
+asdf
+
+## sfdsf shadow-fuchsia-50
+
+
+sdf
+
+sd
 `)
 document.getElementById('app').innerHTML = result
 console.log(result)
