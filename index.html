@@ -6,19 +6,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
-    body {
-      height: 3000px;
+    #app {
+      width: 900px;
+      /* background-color: #ddd; */
+      text-align: center;
+      margin: 0 auto;
+      padding: 30px 0;
+      border-right: 1px solid #ccc;
+    }
+    p {
+      font-size: 20px;
+      line-height: 30px;
     }
     .content {
       display: inline-block;
-      background-color: yellow;
+      /* background-color: yellow; */
+      border-bottom: 2px solid #ffc60a;
+    }
+    .content:hover {
+      background-color: #faf1d1;
     }
     .comment {
-      /* display: ; */
-      /* position: absolute;
-      right: 100px;
-      top: 100px; */
-      background-color: red;
+      /* background-color: red; */
+      border: 1px solid #ddd;
+      border-top: 6px solid #ffc60a;
+      border-radius: 8px;
+      padding: 10px 16px;
+      box-shadow: 0px 0px 16px #ddd;
+      color: #555;
+      width: 250px;
     }
   </style>
 </head>
@@ -30,31 +46,52 @@
     import comment from './dist/index.mjs'
 
     const md = new MarkdownIt()
-    md.use(comment)
+    md.use(comment, {
+      direction: 'right',
+      distance: '50px',
+    })
 const result = md.render(`
 
-* hello
-* world
+## Reach the goals
+
+My life has been a trade-off
+
+If I wanted to reach the goals I set for myself, I had to get at it and stay at it everyday
+
+I had to think about it [all the time]-May be this is the last day- .
+
+I had to get up everyday with my mind set on improving something.
+
+I was driven by a desire to always be on the [top]-top is anther direction to bottom- of the heap
+
+## Mean Something
+
+I want to do good .
+
+I want the world to be better because I was here
+
+I want [my life ,my work]-If you are not making someone else's life better then you are wasting your time .- ,and my family to mean something
 
 
-## saf bg-transparent
+Your life will become better by making other lives better
 
-\`\`\`
-let as = 323;
-sd
-\`\`\`
+I want to represent an idea
 
-Hello [World]-This is a comment-, this is a comment
+I want to represent possibilities
 
+I want to represent an idea that you really can make what you want.
 
-asdf
+## Protect your dream
 
-## sfdsf shad[ow-fu]-chs-ia-50
+Don't ever let someone tell you that you can't do something
 
+Not even me
 
-sdf
+You got a dream ,you gotta protect it
 
-sd
+When people can't do something themselves, they are gonna tell you that you can't do it.
+
+You want something ,go get it
 `)
 document.getElementById('app').innerHTML = result
 console.log(result)

@@ -67,18 +67,16 @@ interface StateBlock {
 }
 
 interface Options {
-  left: string
-  right: string
   direction: 'left' | 'right'
+  distance: string | number
 }
 
 type renderFunction = (tokens: Array<Token>, idx: number, options: any, env: any, slf: any) => string
 
 let count = 0
 let globalOptions: Options = {
-  left: '100px',
-  right: '100px',
   direction: 'right',
+  distance: '100px',
 }
 
 const renderContentDefault: renderFunction = (tokens, idx, _options, env, slf) => {
@@ -94,10 +92,8 @@ const renderContentDefault: renderFunction = (tokens, idx, _options, env, slf) =
 }
 
 export default function comment_plugin(md: MarkdownIt, options: Options) {
-  // const renderContent = options?.renderContent || renderContentDefault
-  // const renderComment = options?.renderComment || renderCommentDefault
-
   globalOptions = { ...globalOptions, ...options }
+  globalOptions.distance = typeof globalOptions.distance === 'number' ? `${globalOptions.distance}px` : globalOptions.distance
 
   function container(state: StateBlock) {
     const start = state.pos
@@ -112,6 +108,7 @@ export default function comment_plugin(md: MarkdownIt, options: Options) {
 
     let token = state.push('content_open', 'span', 1)
 
+    // record the serial number and comment in meta
     token.meta = {
       count,
       content,
@@ -123,6 +120,7 @@ export default function comment_plugin(md: MarkdownIt, options: Options) {
 
     state.push('content_close', 'span', -1)
 
+    // serial number plus one
     count++
 
     // go to the end of the comment
@@ -140,20 +138,22 @@ export default function comment_plugin(md: MarkdownIt, options: Options) {
  * @param {string} comment comment
  */
 function generationComment(count: number, comment: string) {
-  const contentNode = document.querySelector(`.content_${count}`)
-  // const commentNode = document.querySelector(`.comment_${count}`)
-  const commentNode = document.createElement('div')
+  const contentNode: HTMLDivElement = document.querySelector(`.content_${count}`)!
+
+  const commentNode: HTMLDivElement = document.createElement('div')
   commentNode.innerText = comment
   commentNode.className = `comment comment_${count}`
+
   const style = {
     position: 'absolute',
-    ...(globalOptions.direction === 'right' ? { right: globalOptions.right } : { left: globalOptions.left }),
+    ...(globalOptions.direction === 'right'
+      ? { right: globalOptions.distance }
+      : { left: globalOptions.distance }),
   }
+
   Object.assign(commentNode.style, style)
 
-  console.log('commentNode', commentNode, contentNode)
   document.body.appendChild(commentNode)
   if (contentNode && commentNode)
     commentNode.style.top = `${contentNode.offsetTop}px`
-    // document.querySelector('.comment')
 }
