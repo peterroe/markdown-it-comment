@@ -31,7 +31,11 @@ interface Token {
   content: string
   markup: string
   info: string
-  meta: any
+  meta: {
+    count: number
+    content: string
+    comment: string
+  }
   block: boolean
   hidden: boolean
   attrJoin: (a: string, b: string) => void
@@ -63,33 +67,39 @@ interface StateBlock {
 }
 
 interface Options {
-  renderContent: Function
-  renderComment: Function
+  left: string
+  right: string
+  direction: 'left' | 'right'
 }
 
 type renderFunction = (tokens: Array<Token>, idx: number, options: any, env: any, slf: any) => string
 
 let count = 0
+let globalOptions: Options = {
+  left: '100px',
+  right: '100px',
+  direction: 'right',
+}
 
-export default function comment_plugin(md: MarkdownIt, options: Options) {
-  const renderContentDefault: renderFunction = (tokens, idx, _options, env, slf) => {
-    if (tokens[idx].nesting === 1) {
-      const { count, comment } = tokens[idx].meta
-      tokens[idx].attrJoin('class', `content content_${count}`)
-      window.addEventListener('load', () => {
-        generationComment(count, comment)
-      })
-    }
-
-    // console.log('loaded', tokens[idx])
-
-    return slf.renderToken(tokens, idx, _options, env, slf)
+const renderContentDefault: renderFunction = (tokens, idx, _options, env, slf) => {
+  if (tokens[idx].nesting === 1) {
+    const { count, comment } = tokens[idx].meta
+    tokens[idx].attrJoin('class', `content content_${count}`)
+    window.addEventListener('load', () => {
+      generationComment(count, comment)
+    })
   }
 
-  const renderContent = options?.renderContent || renderContentDefault
+  return slf.renderToken(tokens, idx, _options, env, slf)
+}
+
+export default function comment_plugin(md: MarkdownIt, options: Options) {
+  // const renderContent = options?.renderContent || renderContentDefault
   // const renderComment = options?.renderComment || renderCommentDefault
 
-  function container(state: StateBlock, silent: boolean) {
+  globalOptions = { ...globalOptions, ...options }
+
+  function container(state: StateBlock) {
     const start = state.pos
     const marker = state.src[start]
 
@@ -101,7 +111,7 @@ export default function comment_plugin(md: MarkdownIt, options: Options) {
     const comment = result[2]
 
     let token = state.push('content_open', 'span', 1)
-    // token.attrJoin('class', `content_${count}`)
+
     token.meta = {
       count,
       content,
@@ -112,19 +122,6 @@ export default function comment_plugin(md: MarkdownIt, options: Options) {
     token.content = content
 
     state.push('content_close', 'span', -1)
-    // token.markup = ']'
-
-    // token = state.push('comment_open', 'span', 1)
-    // token.attrJoin('class', `comment_${count}`)
-    // token.content = comment
-    // token.markup = '-'
-    // token.meta = { count }
-
-    // token = state.push('text', '', 0)
-    // token.content = comment
-
-    // token = state.push('comment_close', 'span', -1)
-    // token.markup = '-'
 
     count++
 
@@ -133,10 +130,7 @@ export default function comment_plugin(md: MarkdownIt, options: Options) {
   }
 
   md.inline.ruler.before('emphasis', 'content', container)
-  md.renderer.rules.content_open = renderContent
-  // md.renderer.rules.content_close = renderContent
-  // md.renderer.rules.comment_open = renderComment
-  // md.renderer.rules.comment_close = renderComment
+  md.renderer.rules.content_open = renderContentDefault
 }
 
 /**
@@ -148,11 +142,15 @@ export default function comment_plugin(md: MarkdownIt, options: Options) {
 function generationComment(count: number, comment: string) {
   const contentNode = document.querySelector(`.content_${count}`)
   // const commentNode = document.querySelector(`.comment_${count}`)
-
   const commentNode = document.createElement('div')
   commentNode.innerText = comment
   commentNode.className = `comment comment_${count}`
-  // console.log('contentNode', `.content_${tokens[idx]?.meta?.count}`)
+  const style = {
+    position: 'absolute',
+    ...(globalOptions.direction === 'right' ? { right: globalOptions.right } : { left: globalOptions.left }),
+  }
+  Object.assign(commentNode.style, style)
+
   console.log('commentNode', commentNode, contentNode)
   document.body.appendChild(commentNode)
   if (contentNode && commentNode)
