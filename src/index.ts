@@ -73,33 +73,21 @@ let count = 0
 
 export default function comment_plugin(md: MarkdownIt, options: Options) {
   const renderContentDefault: renderFunction = (tokens, idx, _options, env, slf) => {
-    if (tokens[idx].nesting === 1)
-      tokens[idx].attrJoin('class', 'content')
-
-    console.log('loaded', tokens[idx])
-    window.onload = () => {
-      const contentNode = document.querySelector(`.content_${tokens[idx]?.meta?.count}`)
-      const commentNode = document.querySelector(`.comment_${tokens[idx]?.meta?.count}`)
-      console.log('contentNode', `.content_${tokens[idx]?.meta?.count}`)
-      console.log('commentNode', commentNode)
-      if (contentNode && commentNode) {
-        commentNode.style.top = `${contentNode.offsetTop}px`
-        document.querySelector('.comment')
-      }
+    if (tokens[idx].nesting === 1) {
+      const { count, comment } = tokens[idx].meta
+      tokens[idx].attrJoin('class', `content content_${count}`)
+      window.addEventListener('load', () => {
+        generationComment(count, comment)
+      })
     }
 
-    return slf.renderToken(tokens, idx, _options, env, slf)
-  }
+    // console.log('loaded', tokens[idx])
 
-  const renderCommentDefault: renderFunction = (tokens, idx, _options, env, slf) => {
-    if (tokens[idx].nesting === 1)
-      tokens[idx].attrJoin('class', 'comment')
-    // console.log(tokens[idx])
     return slf.renderToken(tokens, idx, _options, env, slf)
   }
 
   const renderContent = options?.renderContent || renderContentDefault
-  const renderComment = options?.renderComment || renderCommentDefault
+  // const renderComment = options?.renderComment || renderCommentDefault
 
   function container(state: StateBlock, silent: boolean) {
     const start = state.pos
@@ -113,22 +101,30 @@ export default function comment_plugin(md: MarkdownIt, options: Options) {
     const comment = result[2]
 
     let token = state.push('content_open', 'span', 1)
-    token.attrJoin('class', `content_${count}`)
-    token.meta = { count }
+    // token.attrJoin('class', `content_${count}`)
+    token.meta = {
+      count,
+      content,
+      comment,
+    }
 
     token = state.push('text', '', 0)
     token.content = content
 
     state.push('content_close', 'span', -1)
+    // token.markup = ']'
 
-    token = state.push('comment_open', 'span', 1)
-    token.attrJoin('class', `comment_${count}`)
-    token.meta = { count }
+    // token = state.push('comment_open', 'span', 1)
+    // token.attrJoin('class', `comment_${count}`)
+    // token.content = comment
+    // token.markup = '-'
+    // token.meta = { count }
 
-    token = state.push('text', '', 0)
-    token.content = comment
+    // token = state.push('text', '', 0)
+    // token.content = comment
 
-    state.push('comment_close', 'span', -1)
+    // token = state.push('comment_close', 'span', -1)
+    // token.markup = '-'
 
     count++
 
@@ -138,7 +134,28 @@ export default function comment_plugin(md: MarkdownIt, options: Options) {
 
   md.inline.ruler.before('emphasis', 'content', container)
   md.renderer.rules.content_open = renderContent
-  md.renderer.rules.content_close = renderContent
-  md.renderer.rules.comment_open = renderComment
-  md.renderer.rules.comment_close = renderComment
+  // md.renderer.rules.content_close = renderContent
+  // md.renderer.rules.comment_open = renderComment
+  // md.renderer.rules.comment_close = renderComment
+}
+
+/**
+ * @description: generate comment node and append to body
+ * @param {number} count serial number
+ * @param {string} content content
+ * @param {string} comment comment
+ */
+function generationComment(count: number, comment: string) {
+  const contentNode = document.querySelector(`.content_${count}`)
+  // const commentNode = document.querySelector(`.comment_${count}`)
+
+  const commentNode = document.createElement('div')
+  commentNode.innerText = comment
+  commentNode.className = `comment comment_${count}`
+  // console.log('contentNode', `.content_${tokens[idx]?.meta?.count}`)
+  console.log('commentNode', commentNode, contentNode)
+  document.body.appendChild(commentNode)
+  if (contentNode && commentNode)
+    commentNode.style.top = `${contentNode.offsetTop}px`
+    // document.querySelector('.comment')
 }
