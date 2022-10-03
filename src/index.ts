@@ -81,10 +81,10 @@ let globalOptions: Options = {
 
 const renderContentDefault: renderFunction = (tokens, idx, _options, env, slf) => {
   if (tokens[idx].nesting === 1) {
-    const { count, comment } = tokens[idx].meta
+    const { count, content, comment } = tokens[idx].meta
     tokens[idx].attrJoin('class', `content content_${count}`)
     window.addEventListener('load', () => {
-      generationComment(count, comment)
+      generationComment(count, content, comment)
     })
   }
 
@@ -134,14 +134,18 @@ export default function comment_plugin(md: MarkdownIt, options: Options) {
 /**
  * @description: generate comment node and append to body
  * @param {number} count serial number
- * @param {string} content content
  * @param {string} comment comment
  */
-function generationComment(count: number, comment: string) {
-  const contentNode: HTMLDivElement = document.querySelector(`.content_${count}`)!
+function generationComment(count: number, content: string, comment: string) {
+  const contentNode: HTMLSpanElement = document.querySelector(`.content_${count}`)!
 
   const commentNode: HTMLDivElement = document.createElement('div')
-  commentNode.innerText = comment
+  commentNode.innerHTML = `
+  <div>
+    <div class="comment-ref">${content}</div>
+    <div class="comment-text">${comment}</div>
+  </div>
+  `
   commentNode.className = `comment comment_${count}`
 
   const style = {
