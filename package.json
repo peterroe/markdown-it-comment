@@ -30,7 +30,7 @@
     "registry": "https://registry.npmjs.org"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "0.26.3",
+    "@antfu/eslint-config": "0.27.0",
     "bumpp": "8.2.1",
     "esbuild": "^0.15.9",
     "eslint": "8.24.0",
