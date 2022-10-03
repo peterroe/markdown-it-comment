@@ -20,28 +20,29 @@
     }
     .content {
       display: inline-block;
-      /* background-color: yellow; */
       border-bottom: 2px solid #ffc60a;
     }
     .content:hover {
       background-color: #faf1d1;
     }
+    .content:hover + .comment {
+      opacity: 1;
+    }
     .comment {
-      /* background-color: red; */
+      opacity: 0;
+      text-align: left;
+      position: fixed;
+      transform: translateY(-50%);
+      top: 50%;
+      left: 30px;
       border: 1px solid #ddd;
       border-top: 6px solid #ffc60a;
       border-radius: 8px;
       padding: 10px 16px;
       box-shadow: 0px 0px 16px #ddd;
+      transition: all .4s ease-out;
       color: #555;
       width: 250px;
-    }
-    .comment-ref {
-      border-left: 3px solid #bbbfc4;
-      padding-left: 10px;
-      color: #646a73;
-      font-size: 12px;
-      margin-bottom: 10px;
     }
   </style>
 </head>
@@ -69,7 +70,7 @@ I had to think about it [all the time]-May be this is the last day- .
 
 I had to get up everyday with my mind set on improving something.
 
-I was driven by a desire to always be on the [top]-top is anther direction to bottom- of the heap
+I was driv[en by a ]-des-ire to always be on the [top]-top is anther direction to bottom- of the heap
 
 ## Mean Something
 
@@ -86,7 +87,7 @@ I want to represent an idea
 
 I want to represent possibilities
 
-I want [to represent an idea that you really can make]- what you want-.
+I want [to represent an idea]- that you really can make what you want-.
 
 ## Protect your dream
 

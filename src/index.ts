@@ -31,11 +31,7 @@ interface Token {
   content: string
   markup: string
   info: string
-  meta: {
-    count: number
-    content: string
-    comment: string
-  }
+  meta: any
   block: boolean
   hidden: boolean
   attrJoin: (a: string, b: string) => void
@@ -67,35 +63,31 @@ interface StateBlock {
 }
 
 interface Options {
-  direction: 'left' | 'right'
-  distance: string | number
+  renderContent: Function
+  renderComment: Function
 }
 
 type renderFunction = (tokens: Array<Token>, idx: number, options: any, env: any, slf: any) => string
 
-let count = 0
-let globalOptions: Options = {
-  direction: 'right',
-  distance: '100px',
-}
+export default function comment_plugin(md: MarkdownIt, options: Options) {
+  const renderContentDefault: renderFunction = (tokens, idx, _options, env, slf) => {
+    if (tokens[idx].nesting === 1)
+      tokens[idx].attrJoin('class', 'content')
 
-const renderContentDefault: renderFunction = (tokens, idx, _options, env, slf) => {
-  if (tokens[idx].nesting === 1) {
-    const { count, content, comment } = tokens[idx].meta
-    tokens[idx].attrJoin('class', `content content_${count}`)
-    window && window.addEventListener('load', () => {
-      generationComment(count, content, comment)
-    })
+    return slf.renderToken(tokens, idx, _options, env, slf)
   }
 
-  return slf.renderToken(tokens, idx, _options, env, slf)
-}
+  const renderCommentDefault: renderFunction = (tokens, idx, _options, env, slf) => {
+    if (tokens[idx].nesting === 1)
+      tokens[idx].attrJoin('class', 'comment')
 
-export default function comment_plugin(md: MarkdownIt, options: Options) {
-  globalOptions = { ...globalOptions, ...options }
-  globalOptions.distance = typeof globalOptions.distance === 'number' ? `${globalOptions.distance}px` : globalOptions.distance
+    return slf.renderToken(tokens, idx, _options, env, slf)
+  }
 
-  function container(state: StateBlock) {
+  const renderContent = options?.renderContent || renderContentDefault
+  const renderComment = options?.renderComment || renderCommentDefault
+
+  function container(state: StateBlock, silent: boolean) {
     const start = state.pos
     const marker = state.src[start]
 
@@ -106,58 +98,26 @@ export default function comment_plugin(md: MarkdownIt, options: Options) {
     const content = result[1]
     const comment = result[2]
 
-    let token = state.push('content_open', 'span', 1)
+    state.push('content_open', 'div', 1)
 
-    // record the serial number and comment in meta
-    token.meta = {
-      count,
-      content,
-      comment,
-    }
-
-    token = state.push('text', '', 0)
+    let token = state.push('text', '', 0)
     token.content = content
 
-    state.push('content_close', 'span', -1)
+    state.push('content_close', 'div', -1)
 
-    // serial number plus one
-    count++
+    state.push('comment_open', 'div', 1)
+    token = state.push('text', '', 0)
+    token.content = comment
+
+    state.push('comment_close', 'div', -1)
 
     // go to the end of the comment
     state.pos += content.length + comment.length + 4
   }
 
   md.inline.ruler.before('emphasis', 'content', container)
-  md.renderer.rules.content_open = renderContentDefault
-}
-
-/**
- * @description: generate comment node and append to body
- * @param {number} count serial number
- * @param {string} comment comment
- */
-function generationComment(count: number, content: string, comment: string) {
-  const contentNode: HTMLSpanElement = document.querySelector(`.content_${count}`)!
-
-  const commentNode: HTMLDivElement = document.createElement('div')
-  commentNode.innerHTML = `
-  <div>
-    <div class="comment-ref">${content}</div>
-    <div class="comment-text">${comment}</div>
-  </div>
-  `
-  commentNode.className = `comment comment_${count}`
-
-  const style = {
-    position: 'absolute',
-    ...(globalOptions.direction === 'right'
-      ? { right: globalOptions.distance }
-      : { left: globalOptions.distance }),
-  }
-
-  Object.assign(commentNode.style, style)
-
-  document.body.appendChild(commentNode)
-  if (contentNode && commentNode)
-    commentNode.style.top = `${contentNode.offsetTop}px`
+  md.renderer.rules.content_open = renderContent
+  md.renderer.rules.content_close = renderContent
+  md.renderer.rules.comment_open = renderComment
+  md.renderer.rules.comment_close = renderComment
 }
