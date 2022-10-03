@@ -83,7 +83,7 @@ const renderContentDefault: renderFunction = (tokens, idx, _options, env, slf) =
   if (tokens[idx].nesting === 1) {
     const { count, content, comment } = tokens[idx].meta
     tokens[idx].attrJoin('class', `content content_${count}`)
-    window.addEventListener('load', () => {
+    window && window.addEventListener('load', () => {
       generationComment(count, content, comment)
     })
   }
