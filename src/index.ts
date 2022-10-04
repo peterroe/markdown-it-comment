@@ -69,6 +69,13 @@ interface Options {
 
 type renderFunction = (tokens: Array<Token>, idx: number, options: any, env: any, slf: any) => string
 
+function filterTextTail(state: StateBlock) {
+  state.tokens.forEach((it) => {
+    if (it.type === 'text' && it.content === 'undefined')
+      it.content = ''
+  })
+}
+
 export default function comment_plugin(md: MarkdownIt, options: Options) {
   const renderContentDefault: renderFunction = (tokens, idx, _options, env, slf) => {
     if (tokens[idx].nesting === 1)
@@ -116,6 +123,7 @@ export default function comment_plugin(md: MarkdownIt, options: Options) {
   }
 
   md.inline.ruler.before('emphasis', 'content', container)
+  md.inline.ruler2.after('emphasis', 'content', filterTextTail)
   md.renderer.rules.content_open = renderContent
   md.renderer.rules.content_close = renderContent
   md.renderer.rules.comment_open = renderComment
