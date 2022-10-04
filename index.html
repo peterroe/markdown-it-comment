@@ -31,6 +31,15 @@
     }
     .content:hover + .comment {
       opacity: 1;
+      animation: appear 0.5s;
+    }
+    @keyframes appear {
+      from {
+        right: -100px;
+      }
+      to {
+        right: 30px;
+      }
     }
     .comment {
       display: inline-block;
