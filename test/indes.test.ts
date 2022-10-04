@@ -10,11 +10,23 @@ describe('test', () => {
   it('should workd', () => {
     const result = md.render(`
     
-Hello [World]-This is a comment-, Please comment on this article
+Hello [World]{This is a comment}, Please comment on this article
     
 `)
     expect(result).toMatchInlineSnapshot(`
-      "<p>Hello <div class=\\"content\\">World</div><div class=\\"comment\\">This is a comment</div>, Please comment on this article</p>
+      "<p>Hello <span class=\\"content\\">World</span><span class=\\"comment\\">This is a comment</span>, Please comment on this article</p>
+      "
+    `)
+  })
+
+  it('should workd', () => {
+    const result = md.render(`
+    
+Hello [World]{This is a comment}
+    
+`)
+    expect(result).toMatchInlineSnapshot(`
+      "<p>Hello <span class=\\"content\\">World</span><span class=\\"comment\\">This is a comment</span></p>
       "
     `)
   })

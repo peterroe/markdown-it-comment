@@ -10,7 +10,7 @@ __v2.+ requires `markdown-it` v5.+, see changelog.__
 With this plugin you can create comments like:
 
 ```
-[here be content]-here be comment-
+[here be content]{here be comment}
 ```
 
 .... and specify how they should be rendered. If no renderer defined, `<span>` with name class will be created:
@@ -65,11 +65,11 @@ md.use(require('markdown-it-comment'), {
   }
 })
 
-console.log(md.render('hello [world]-this is a comment-.'))
+console.log(md.render('hello [world]{this is a comment}'))
 
 // Output:
 // <p>hello <span class="content">world</span>
-// <span class="comment">this is a comment</span>.</p>
+// <span class="comment">this is a comment</span></p>
 
 ```
 
