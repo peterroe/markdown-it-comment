@@ -97,7 +97,6 @@ export default function comment_plugin(md: MarkdownIt, options: Options) {
   function container(state: StateBlock) {
     const start = state.pos
     const marker = state.src[start]
-    console.log(marker, 132)
 
     if (!/\[(.+)\]\{(.+)\}/g.test(state.src) || marker !== '[')
       return
