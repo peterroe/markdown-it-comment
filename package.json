@@ -24,6 +24,7 @@
     "start": "esno src/index.ts",
     "test": "vitest",
     "release": "bumpp",
+    "docs:build": "vite build && gh-pages -d docs",
     "typecheck": "tsc --noEmit"
   },
   "publishConfig": {
