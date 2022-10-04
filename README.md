@@ -46,7 +46,7 @@ Params:
 ## Example
 
 ```js
-var md = require('markdown-it')();
+const md = require('markdown-it')()
 
 md.use(require('markdown-it-comment'), {
 
@@ -55,7 +55,7 @@ md.use(require('markdown-it-comment'), {
       tokens[idx].attrJoin('class', 'content')
 
     return slf.renderToken(tokens, idx, _options, env, slf)
-  }
+  },
 
   renderCommentDefault(tokens, idx, _options, env, slf) {
     if (tokens[idx].nesting === 1)
@@ -63,14 +63,13 @@ md.use(require('markdown-it-comment'), {
 
     return slf.renderToken(tokens, idx, _options, env, slf)
   }
-});
+})
 
 console.log(md.render('hello [world]-this is a comment-.'))
 
-// Output: 
+// Output:
 // <p>hello <span class="content">world</span>
 // <span class="comment">this is a comment</span>.</p>
-
 
 ```
 
