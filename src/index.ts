@@ -87,7 +87,7 @@ export default function comment_plugin(md: MarkdownIt, options: Options) {
   const renderContent = options?.renderContent || renderContentDefault
   const renderComment = options?.renderComment || renderCommentDefault
 
-  function container(state: StateBlock, silent: boolean) {
+  function container(state: StateBlock) {
     const start = state.pos
     const marker = state.src[start]
 
