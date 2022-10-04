@@ -34,10 +34,47 @@ $ bower install markdown-it-comment --save
 
 ```js
 const md = require('markdown-it')()
-  .use(require('markdown-it-comment'))
+  .use(require('markdown-it-comment')[,options])
 ```
 
+Params:
+
+* options:
+  * renderContent - optional, renderer function for opening/closing content tokens.
+  * renderComment - optional, renderer function for opening/closing comment tokens.
+
 ## Example
+
+```js
+var md = require('markdown-it')();
+
+md.use(require('markdown-it-comment'), {
+
+  renderContentDefault(tokens, idx, _options, env, slf) {
+    if (tokens[idx].nesting === 1)
+      tokens[idx].attrJoin('class', 'content')
+
+    return slf.renderToken(tokens, idx, _options, env, slf)
+  }
+
+  renderCommentDefault(tokens, idx, _options, env, slf) {
+    if (tokens[idx].nesting === 1)
+      tokens[idx].attrJoin('class', 'comment')
+
+    return slf.renderToken(tokens, idx, _options, env, slf)
+  }
+});
+
+console.log(md.render('hello [world]-this is a comment-.'))
+
+// Output: 
+// <p>hello <span class="content">world</span>
+// <span class="comment">this is a comment</span>.</p>
+
+
+```
+
+## Demo
 
 https://peterroe.github.io/markdown-it-comment/
 
