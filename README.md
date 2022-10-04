@@ -3,11 +3,11 @@
 [![NPM version](https://img.shields.io/npm/v/markdown-it-comment.svg?style=flat)](https://www.npmjs.org/package/markdown-it-comment)
 
 
-> Plugin for creating block-level custom containers for [markdown-it](https://github.com/markdown-it/markdown-it) markdown parser.
+> Plugin for creating custom comment for [markdown-it](https://github.com/markdown-it/markdown-it) markdown parser.
 
 __v2.+ requires `markdown-it` v5.+, see changelog.__
 
-With this plugin you can create block containers like:
+With this plugin you can create comments like:
 
 ```
 [here be content]-here be comment-
