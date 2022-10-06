@@ -52,14 +52,14 @@ md.use(require('markdown-it-comment'), {
 
   renderContentDefault(tokens, idx, _options, env, slf) {
     if (tokens[idx].nesting === 1)
-      tokens[idx].attrJoin('class', 'content')
+      tokens[idx].attrJoin('class', 'md-content')
 
     return slf.renderToken(tokens, idx, _options, env, slf)
   },
 
   renderCommentDefault(tokens, idx, _options, env, slf) {
     if (tokens[idx].nesting === 1)
-      tokens[idx].attrJoin('class', 'comment')
+      tokens[idx].attrJoin('class', 'md-comment')
 
     return slf.renderToken(tokens, idx, _options, env, slf)
   }
@@ -68,8 +68,8 @@ md.use(require('markdown-it-comment'), {
 console.log(md.render('hello [world]{this is a comment}'))
 
 // Output:
-// <p>hello <span class="content">world</span>
-// <span class="comment">this is a comment</span></p>
+// <p>hello <span class="md-content">world</span>
+// <span class="md-comment">this is a comment</span></p>
 
 ```
 
