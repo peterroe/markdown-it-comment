@@ -79,14 +79,14 @@ function filterTextTail(state: StateBlock) {
 export default function comment_plugin(md: MarkdownIt, options: Options) {
   const renderContentDefault: renderFunction = (tokens, idx, _options, env, slf) => {
     if (tokens[idx].nesting === 1)
-      tokens[idx].attrJoin('class', 'content')
+      tokens[idx].attrJoin('class', 'md-content')
 
     return slf.renderToken(tokens, idx, _options, env, slf)
   }
 
   const renderCommentDefault: renderFunction = (tokens, idx, _options, env, slf) => {
     if (tokens[idx].nesting === 1)
-      tokens[idx].attrJoin('class', 'comment')
+      tokens[idx].attrJoin('class', 'md-comment')
 
     return slf.renderToken(tokens, idx, _options, env, slf)
   }
