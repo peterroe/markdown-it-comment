@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" md-content="IE=edge">
+  <meta name="viewport" md-content="width=device-width, initial-scale=1.0">
   <title>Markdown-it-comment</title>
   <style>
     #app {
@@ -18,14 +18,14 @@
       margin: 50px 0;
     }
     
-    .content {
+    .md-content {
       display: inline-block;
       border-bottom: 2px solid #ffc60a;
     }
-    .content:hover {
+    .md-content:hover {
       background-color: #faf1d1;
     }
-    .content:hover + .comment {
+    .md-content:hover + .md-comment {
       opacity: 1;
       animation: appear 0.5s;
     }
@@ -37,7 +37,7 @@
         right: 30px;
       }
     }
-    .comment {
+    .md-comment {
       display: inline-block;
       opacity: 0;
       text-align: left;
@@ -56,7 +56,7 @@
     }
 
     @media (max-width: 1200px) {
-      .comment {
+      .md-comment {
         display: none;
       }
     }
