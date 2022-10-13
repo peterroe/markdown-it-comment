@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" md-content="IE=edge">
+  <meta name="viewport" md-content="width=device-width, initial-scale=1.0">
   <title>Markdown-it-comment</title>
   <style>
     #app {
@@ -17,19 +17,15 @@
       /* line-height: 60px; */
       margin: 50px 0;
     }
-    @media (max-width: 1200px) {
-      .comment {
-        display: none;
-      }
-    }
-    .content {
+    
+    .md-content {
       display: inline-block;
       border-bottom: 2px solid #ffc60a;
     }
-    .content:hover {
+    .md-content:hover {
       background-color: #faf1d1;
     }
-    .content:hover + .comment {
+    .md-content:hover + .md-comment {
       opacity: 1;
       animation: appear 0.5s;
     }
@@ -41,7 +37,7 @@
         right: 30px;
       }
     }
-    .comment {
+    .md-comment {
       display: inline-block;
       opacity: 0;
       text-align: left;
@@ -58,8 +54,14 @@
       /* color: #646a73; */
       width: 250px;
     }
+
+    @media (max-width: 1200px) {
+      .md-comment {
+        display: none;
+      }
+    }
   </style>
-  <script type="module" crossorigin src="/markdown-it-comment/assets/index.e16a4ec5.js"></script>
+  <script type="module" crossorigin src="/markdown-it-comment/assets/index.9c5ea166.js"></script>
 </head>
 <body>
   <div id="app"></div>  
