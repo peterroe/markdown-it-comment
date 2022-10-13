@@ -107,19 +107,25 @@ export default function comment_plugin(md: MarkdownIt, options: Options) {
 
     state.push('content_open', 'span', 1)
 
-    let token = state.push('text', '', 0)
-    token.content = content
+    const max = state.posMax
+    state.pos += 1
+    state.posMax = state.pos + content.length
+
+    state.md.inline.tokenize(state)
 
     state.push('content_close', 'span', -1)
 
     state.push('comment_open', 'span', 1)
-    token = state.push('text', '', 0)
-    token.content = comment
+
+    state.pos += 2
+    state.posMax = state.pos + comment.length - 1
+    state.md.inline.tokenize(state)
 
     state.push('comment_close', 'span', -1)
 
     // go to the end of the comment
-    state.pos += content.length + comment.length + 4
+    state.pos += 2
+    state.posMax = max
   }
 
   md.inline.ruler.before('emphasis', 'content', container)
