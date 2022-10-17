@@ -7,6 +7,8 @@ interface Ruler {
 interface MarkdownIt {
   inline: {
     ruler: Ruler
+    ruler2: Ruler
+    tokenize: Function
   }
   block: {
     ruler: Ruler
@@ -17,6 +19,10 @@ interface MarkdownIt {
   renderer: {
     rules: {
       fence: Function
+      content_open: Function
+      content_close: Function
+      comment_open: Function
+      comment_close: Function
     }
   }
 }

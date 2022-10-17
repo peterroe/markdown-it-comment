@@ -4,7 +4,7 @@ import comment_plugin from '../src/index'
 
 const md = new MarkdownIt()
 
-md.use(comment_plugin)
+md.use(comment_plugin as any)
 
 describe('test', () => {
   it('should workd', () => {
