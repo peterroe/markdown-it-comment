@@ -16,8 +16,8 @@ With this plugin you can create comments like:
 .... and specify how they should be rendered. If no renderer defined, `<span>` with name class will be created:
 
 ```html
-<span class="content">here be content</span>
-<span class="comment">here be comment</span>
+<span class="md-content">here be content</span>
+<span class="md-comment">here be comment</span>
 ```
 
 ## Installation
@@ -72,6 +72,55 @@ console.log(md.render('hello [world]{this is a comment}'))
 // <span class="md-comment">this is a comment</span></p>
 
 ```
+
+## Style
+
+Recommended style for comments:
+
+```css
+.md-content {
+  display: inline-block;
+  border-bottom: 2px solid #ffc60a;
+}
+.md-content:hover {
+  background-color: #faf1d1;
+}
+.md-content:hover + .md-comment {
+  opacity: 1;
+  animation: appear 0.5s;
+}
+@keyframes appear {
+  from {
+    right: -100px;
+  }
+  to {
+    right: 30px;
+  }
+}
+.md-comment {
+  display: inline-block;
+  opacity: 0;
+  text-align: left;
+  position: fixed;
+  transform: translateY(-50%);
+  top: 50%;
+  right: 30px;
+  border: 1px solid #ddd;
+  border-top: 6px solid #ffc60a;
+  border-radius: 8px;
+  padding: 10px 16px;
+  box-shadow: 0px 0px 16px #ddd;
+  transition: all .4s ease-out;
+  width: 250px;
+}
+
+@media (max-width: 1200px) {
+  .md-comment {
+    display: none;
+  }
+}
+```
+
 
 ## Demo
 
